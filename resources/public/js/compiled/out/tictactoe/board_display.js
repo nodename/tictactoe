@@ -1,0 +1,32 @@
+// Compiled by ClojureScript 1.10.439 {}
+goog.provide('tictactoe.board_display');
+goog.require('cljs.core');
+goog.require('reagent.core');
+goog.require('re_frame.core');
+goog.require('stylefy.core');
+stylefy.core.class$.call(null,"board",new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"width","width",-384071477),"200px",new cljs.core.Keyword(null,"height","height",1025178622),"200px",new cljs.core.Keyword(null,"border-collapse","border-collapse",919100239),"collapse"], null));
+stylefy.core.class$.call(null,"boardsquare",new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"width","width",-384071477),"33.33%",new cljs.core.Keyword(null,"height","height",1025178622),"33.33%",new cljs.core.Keyword(null,"border","border",1444987323),"6px solid #222",new cljs.core.Keyword("stylefy.core","mode","stylefy.core/mode",-1757530234),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"after","after",594996914),new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"content","content",15833224),"",new cljs.core.Keyword(null,"display","display",242065432),"block",new cljs.core.Keyword(null,"margin-top","margin-top",392161226),"100%"], null),new cljs.core.Keyword(null,"first-of-type","first-of-type",-740219653),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword("tictactoe.board-display","border-left-color","tictactoe.board-display/border-left-color",464703868),"transparent",new cljs.core.Keyword(null,"border-top-color","border-top-color",-804629899),"transparent"], null)], null)], null));
+stylefy.core.class$.call(null,"board-top-square",new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"border-top-color","border-top-color",-804629899),"transparent"], null));
+stylefy.core.class$.call(null,"board-right-square",new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"border-right-color","border-right-color",2017953775),"transparent"], null));
+stylefy.core.class$.call(null,"board-bottom-square",new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"border-bottom-color","border-bottom-color",-208763333),"transparent"], null));
+tictactoe.board_display.board_display = (function tictactoe$board_display$board_display(board){
+var vec__32209 = board;
+var row0 = cljs.core.nth.call(null,vec__32209,(0),null);
+var row1 = cljs.core.nth.call(null,vec__32209,(1),null);
+var row2 = cljs.core.nth.call(null,vec__32209,(2),null);
+var vec__32212 = row0;
+var sq00 = cljs.core.nth.call(null,vec__32212,(0),null);
+var sq01 = cljs.core.nth.call(null,vec__32212,(1),null);
+var sq02 = cljs.core.nth.call(null,vec__32212,(2),null);
+var vec__32215 = row1;
+var sq10 = cljs.core.nth.call(null,vec__32215,(0),null);
+var sq11 = cljs.core.nth.call(null,vec__32215,(1),null);
+var sq12 = cljs.core.nth.call(null,vec__32215,(2),null);
+var vec__32218 = row2;
+var sq20 = cljs.core.nth.call(null,vec__32218,(0),null);
+var sq21 = cljs.core.nth.call(null,vec__32218,(1),null);
+var sq22 = cljs.core.nth.call(null,vec__32218,(2),null);
+return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"div","div",1057191632),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"style","style",-496642736),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"width","width",-384071477),"100%",new cljs.core.Keyword(null,"height","height",1025178622),"100%"], null)], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"table.board","table.board",178754716),new cljs.core.PersistentVector(null, 5, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"tbody","tbody",-80678300),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"style","style",-496642736),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"width","width",-384071477),"100%",new cljs.core.Keyword(null,"height","height",1025178622),"100%"], null)], null),new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"tr","tr",-1424774646),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"td.boardsquare","td.boardsquare",1408127526),sq00], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"td.boardsquare.board-top-square","td.boardsquare.board-top-square",-1950262336),sq01], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"td.boardsquare.board-top-square.board-right-square","td.boardsquare.board-top-square.board-right-square",1861130387),sq02], null)], null),new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"tr","tr",-1424774646),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"td.boardsquare","td.boardsquare",1408127526),sq10], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"td.boardsquare","td.boardsquare",1408127526),sq11], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"td.boardsquare.board-right-square","td.boardsquare.board-right-square",-359966347),sq12], null)], null),new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"tr.board-bottom-row","tr.board-bottom-row",-28373107),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"td.boardsquare.board-bottom-square","td.boardsquare.board-bottom-square",369553727),sq20], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"td.boardsquare.board-bottom-square","td.boardsquare.board-bottom-square",369553727),sq21], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"td.boardsquare.board-bottom-square.board-right-square","td.boardsquare.board-bottom-square.board-right-square",-967853761),sq22], null)], null)], null)], null)], null);
+});
+
+//# sourceMappingURL=board_display.js.map?rel=1590712797904
