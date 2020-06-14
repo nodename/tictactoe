@@ -7,9 +7,9 @@
 
 
 (def all-squares
-  (for [x [0 1 2]
-        y [0 1 2]]
-    [x y]))
+  (for [row [0 1 2]
+        col [0 1 2]]
+    [row col]))
 
 (defn spaces [n]
   (clojure.string/join "" (repeat n " ")))

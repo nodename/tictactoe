@@ -16,22 +16,22 @@
 (def cols
   (for [col [0 1 2]]
     (for [row [0 1 2]]
-      [col row])))
+      [row col])))
 
 (def rows
-  (for [y [0 1 2]]
-    (for [x [0 1 2]]
-      [x y])))
+  (for [row [0 1 2]]
+    (for [col [0 1 2]]
+      [row col])))
 
 (def diags
-  (cons (for [x [0 1 2]]
-          [x x])
-        [(for [x [0 1 2]]
-           [x (- 2 x)])]))
+  (cons (for [col [0 1 2]]
+          [col col])
+        [(for [col [0 1 2]]
+           [(- 2 col) col])]))
 
 (def all-lines (concat cols rows diags))
 
-(defn sq-contents [board [col row]]
+(defn sq-contents [board [row col]]
   (let [row (get board row)]
     (get row col)))
 
@@ -42,8 +42,8 @@
 (defn print-board [board & [indent]]
   (doall (map #(println indent (mapv string-rep (get board %))) [0 1 2])))
 
-(defn apply-turn [board player [x y]]
-  (assoc-in board [y x] player))                      ;; y comes first!
+(defn apply-turn [board player [row col]]
+  (assoc-in board [row col] player))
 
 (defn turns-reducer [player]
   (let [player (atom (get-opponent player))]
