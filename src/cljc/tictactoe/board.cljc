@@ -1,5 +1,5 @@
 (ns tictactoe.board
-  (:require [tictactoe.player :refer [string-rep]]))
+  (:require [tictactoe.player :refer [string-rep get-opponent]]))
 
 ;(defn neighbors [[x y]]
 ;  (for [dx [-1 0 1]
@@ -31,6 +31,8 @@
 
 (def all-lines (concat cols rows diags))
 
+(defonce starting-board (vec (repeat 3 (vec (repeat 3 nil)))))
+
 (defn sq-contents [board [row col]]
   (let [row (get board row)]
     (get row col)))
@@ -40,7 +42,8 @@
     (sq-contents board coords)))
 
 (defn print-board [board & [indent]]
-  (doall (map #(println indent (mapv string-rep (get board %))) [0 1 2])))
+  (let [indent (if (nil? indent) "" indent)]
+    (doall (map #(println indent (mapv string-rep (get board %))) [0 1 2]))))
 
 (defn apply-turn [board player [row col]]
   (assoc-in board [row col] player))
@@ -51,8 +54,8 @@
       (swap! player get-opponent)
       (apply-turn board @player turn))))
 
-(defn apply-turns [board last-player turns]
-  (reduce (turns-reducer last-player) board turns))
+(defn apply-turns [board next-player turns]
+  (reduce (turns-reducer next-player) board turns))
 
 (defn get-line-winner [board line]
   (let [contents (line-contents board line)]
@@ -62,10 +65,11 @@
       :else nil)))
 
 (defn get-winner [board]
-    (doseq [line all-lines]
-      (let [line-winner (get-line-winner board line)]
-        (when (some? line-winner)
-          line-winner))))
+  (->>
+    all-lines
+    (map #(get-line-winner board %))
+    (remove nil?)
+    first))
 
 (defn winning-moves [board player]
   (for [line all-lines

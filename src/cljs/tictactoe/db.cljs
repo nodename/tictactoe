@@ -1,5 +1,5 @@
 (ns tictactoe.db)
 
 (def default-db
-  {:name "tictactoe"}
-  {:game []})
+  {:name "tictactoe"
+   :game nil})

@@ -1,48 +1,57 @@
 (ns tictactoe.board-display
   (:require [reagent.core :as r]
             [re-frame.core :as re-frame]
-            [stylefy.core :as stylefy :refer [class]]))
+            [stylefy.core :as stylefy :refer [class]]
+            [re-frame.core :as rf]))
 
 
 (class "board" {:width           "200px"
                 :height          "200px"
+                :margin          "0 auto"
                 :border-collapse "collapse"})
 
 (class "boardsquare" {:width         "33.33%"
                       :height        "33.33%"
                       :border        "6px solid #222"
-                      ::stylefy/mode {:after         {:content    ""
-                                                      :display    "block"
-                                                      :margin-top "100%"}
-                                      :first-of-type {::border-left-color "transparent"
-                                                      :border-top-color   "transparent"}}})
+                      ::stylefy/mode {:after {:content    ""
+                                              :display    "block"
+                                              :margin-top "100%"}}})
 
-(class "board-top-square" {:border-top-color "transparent"})
+(class "top-sq" {:border-top-color "transparent"})
+(class "right-sq" {:border-right-color "transparent"})
+(class "bottom-sq" {:border-bottom-color "transparent"})
+(class "left-sq" {:border-left-color "transparent"})
 
-(class "board-right-square" {:border-right-color "transparent"})
+(defn sq [classes row col]
+  (let [who-played @(rf/subscribe [:game/who-played [row col]])
+        winner @(rf/subscribe [:game/winner])]
+    [:td {:class    classes
+          :id       (str "sq-" row "-" col)
+          :style    {:text-align     "center"
+                     :vertical-align "middle"
+                     :line-height    "100%"}
+          :on-click (when (and (nil? who-played) (nil? winner))
+                      (fn [e]
+                        (.preventDefault e)
+                        (rf/dispatch [:game/add-turn [row col]])))}
+     @(rf/subscribe [:game/sq-content [row col]])]))
 
-(class "board-bottom-square" {:border-bottom-color "transparent"})
 
-
-(defn board-display [board]
-  (let [[row0 row1 row2] board
-        [sq00 sq01 sq02] row0
-        [sq10 sq11 sq12] row1
-        [sq20 sq21 sq22] row2]
+(defn board-display []
   [:div {:style {:width  "100%"
                  :height "100%"}}
    [:table.board
     [:tbody {:style {:width  "100%"
                      :height "100%"}}
      [:tr
-      [:td.boardsquare sq00]
-      [:td.boardsquare.board-top-square sq01]
-      [:td.boardsquare.board-top-square.board-right-square sq02]]
+      [sq "boardsquare top-sq left-sq" 0 0]
+      [sq "boardsquare top-sq" 0 1]
+      [sq "boardsquare top-sq right-sq" 0 2]]
      [:tr
-      [:td.boardsquare sq10]
-      [:td.boardsquare sq11]
-      [:td.boardsquare.board-right-square sq12]]
-     [:tr.board-bottom-row
-      [:td.boardsquare.board-bottom-square sq20]
-      [:td.boardsquare.board-bottom-square sq21]
-      [:td.boardsquare.board-bottom-square.board-right-square sq22]]]]]))
+      [sq "boardsquare left-sq" 1 0]
+      [sq "boardsquare" 1 1]
+      [sq "boardsquare right-sq" 1 2]]
+     [:tr
+      [sq "boardsquare bottom-sq left-sq" 2 0]
+      [sq "boardsquare bottom-sq" 2 1]
+      [sq "boardsquare bottom-sq right-sq" 2 2]]]]])

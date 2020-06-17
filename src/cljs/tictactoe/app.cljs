@@ -1,18 +1,43 @@
 (ns tictactoe.app
-  (:require [reagent.core :as r]
-            [re-frame.core :as re-frame]
-            [tictactoe.player :refer [get-opponent]]
+  (:require [tictactoe.player :refer [string-rep]]
             [tictactoe.boards :refer [initial-board]]
             [tictactoe.board :refer [apply-turns print-board]]
             [tictactoe.board-display :as display]
-            [tictactoe.strategy :as strategy]
             [tictactoe.minimax :refer [minimax]]
-            [tictactoe.boards :refer []]))
-
-(def app-state (atom {:game nil}))
+            [tictactoe.boards :refer []]
+            [tictactoe.game-events-and-subs] ;; this must be required for the subscriptions to work
+            [re-frame.core :as rf]))
 
 (defn app []
-  [:div {:style {:width "800px" :height "800px"}}
-   [:div {:style {:width "500px" :height "500px"}}
-    [display/board-display (apply-turns initial-board :O [[0 0] [0 1]])
-     ]]])
+  [:div {:style {:width "100%" :height "100%"}}
+   (let [turn @(rf/subscribe [:game/next-turn-index])
+         player @(rf/subscribe [:game/next-player])
+         game-over? @(rf/subscribe [:game/over?])]
+     [:div {:style {:width          "200px"
+                    :height         "50px"
+                    :margin         "0 auto"
+                    :text-align     "center"
+                    :vertical-align "middle"
+                    :line-height    "50px"}}
+      (if game-over?
+        "GAME OVER"
+        (str "turn " turn " player " (string-rep player)))])
+
+   [display/board-display]
+
+   (let [winner @(rf/subscribe [:game/winner])
+         tied? @(rf/subscribe [:game/tied?])]
+     [:div {:style {:width          "200px"
+                    :height         "50px"
+                    :margin         "0 auto"
+                    :text-align     "center"
+                    :vertical-align "middle"
+                    :line-height    "50px"}}
+      (cond
+        (some? winner) (str (string-rep winner) " WINS!")
+        tied? "TIE GAME")])
+
+   [:div
+    (pr-str @(rf/subscribe [:game/board]))]
+   [:div
+    (pr-str @(rf/subscribe [:game/turns]))]])

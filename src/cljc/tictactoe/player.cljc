@@ -10,4 +10,4 @@
   (condp = player
     :X "X"
     :O "O"
-    nil "-"))
+    nil " "))

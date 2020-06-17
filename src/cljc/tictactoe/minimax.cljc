@@ -14,6 +14,7 @@
 (defn spaces [n]
   (clojure.string/join "" (repeat n " ")))
 
+
 (def minimax
   (memoize (fn [board player ;; depth
   ]
@@ -41,5 +42,3 @@
                              {:move nil :score 0}
                              @value)))) ;; )
              )))
-
-

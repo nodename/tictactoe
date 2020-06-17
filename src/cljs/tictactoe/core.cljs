@@ -5,7 +5,9 @@
             [tictactoe.config :as config]
             [tictactoe.routes :as routes]
             [tictactoe.events :as events]
-            [tictactoe.app :as app]))
+            [tictactoe.app :as app]
+            [tictactoe.play :refer [play-a-game]]
+            [tictactoe.board :refer [starting-board]]))
 
 (defn dev-setup []
   (when config/debug?
@@ -22,4 +24,5 @@
   (re-frame/dispatch-sync [::events/load-app])
   (stylefy/init)
   (dev-setup)
-  (mount-root))
+  (mount-root)
+  #_(play-a-game starting-board :X))
