@@ -1,14 +1,20 @@
 # tictactoe
 
-A Clojure library designed to ... well, that part is up to you.
+Tictactoe implemented in re-frame
 
 ## Usage
 
-FIXME
+Clone the repository
+
+$ cd tictactoe
+
+$ lein figwheel
+
+Open browser to localhost:3449
 
 ## License
 
-Copyright © 2020 FIXME
+Copyright © 2020 Alan Shaw
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
