@@ -10,12 +10,12 @@
                 :margin          "0 auto"
                 :border-collapse "collapse"})
 
-(class "boardsquare" {:width         "33.33%"
-                      :height        "33.33%"
-                      :border        "6px solid #222"
-                      ::stylefy/mode {:after {:content    ""
-                                              :display    "block"
-                                              :margin-top "100%"}}})
+(class "board-sq" {:width         "33.33%"
+                   :height        "33.33%"
+                   :border        "6px solid #222"
+                   ::stylefy/mode {:after {:content    ""
+                                           :display    "block"
+                                           :margin-top "100%"}}})
 
 (class "top-sq" {:border-top-color "transparent"})
 (class "right-sq" {:border-right-color "transparent"})
@@ -52,28 +52,26 @@
   (let [next-player @(rf/subscribe [:game/next-player])
         computers-next-move @(rf/subscribe [:game/computers-next-move])
         its-computers-turn? (= computer-player next-player)]
-    [:div {:style {:display "none"}}
      (when its-computers-turn?
-       (js/setTimeout #(rf/dispatch [:game/add-turn computers-next-move]) 5000))]))
+       (js/setTimeout #(rf/dispatch [:game/add-turn computers-next-move]) 5000))))
 
 
 (defn display [user-player]
+  (computer (get-opponent user-player))
   [:div {:style {:width  "100%"
                  :height "100%"}}
    [:table.board
     [:tbody {:style {:width  "100%"
                      :height "100%"}}
      [:tr
-      [sq "boardsquare top-sq left-sq" 0 0 user-player]
-      [sq "boardsquare top-sq" 0 1 user-player]
-      [sq "boardsquare top-sq right-sq" 0 2 user-player]]
+      [sq "board-sq top-sq left-sq" 0 0 user-player]
+      [sq "board-sq top-sq" 0 1 user-player]
+      [sq "board-sq top-sq right-sq" 0 2 user-player]]
      [:tr
-      [sq "boardsquare left-sq" 1 0 user-player]
-      [sq "boardsquare" 1 1 user-player]
-      [sq "boardsquare right-sq" 1 2 user-player]]
+      [sq "board-sq left-sq" 1 0 user-player]
+      [sq "board-sq" 1 1 user-player]
+      [sq "board-sq right-sq" 1 2 user-player]]
      [:tr
-      [sq "boardsquare bottom-sq left-sq" 2 0 user-player]
-      [sq "boardsquare bottom-sq" 2 1 user-player]
-      [sq "boardsquare bottom-sq right-sq" 2 2 user-player]]]]
-
-   [computer (get-opponent user-player)]])
+      [sq "board-sq bottom-sq left-sq" 2 0 user-player]
+      [sq "board-sq bottom-sq" 2 1 user-player]
+      [sq "board-sq bottom-sq right-sq" 2 2 user-player]]]]])
