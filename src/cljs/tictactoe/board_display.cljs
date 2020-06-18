@@ -31,18 +31,17 @@
                   :animation-iteration-count "5"})
 
 (defn sq [classes row col user-player]
-  (let [who-played-this-sq @(rf/subscribe [:game/who-played [row col]])
-        winner @(rf/subscribe [:game/winner])
+  (let [this-sq-is-empty? (nil? @(rf/subscribe [:game/who-played [row col]]))
         next-player @(rf/subscribe [:game/next-player])
-        its-my-turn (= next-player user-player)]
-    [:td {:class    (if (nil? who-played-this-sq)
+        its-users-turn? (= next-player user-player)]
+    [:td {:class    (if this-sq-is-empty?
                       classes
                       (str classes " " "pulsate"))
           :id       (str "sq-" row "-" col)
           :style    {:text-align     "center"
                      :vertical-align "middle"
                      :line-height    "100%"}
-          :on-click (when (and (nil? who-played-this-sq) its-my-turn)
+          :on-click (when (and its-users-turn? this-sq-is-empty?)
                       (fn [e]
                         (.preventDefault e)
                         (rf/dispatch [:game/add-turn [row col]])))}
@@ -52,13 +51,13 @@
 (defn computer [computer-player]
   (let [next-player @(rf/subscribe [:game/next-player])
         computers-next-move @(rf/subscribe [:game/computers-next-move])
-        its-computers-turn (= computer-player next-player)]
+        its-computers-turn? (= computer-player next-player)]
     [:div {:style {:display "none"}}
-     (when its-computers-turn
+     (when its-computers-turn?
        (js/setTimeout #(rf/dispatch [:game/add-turn computers-next-move]) 5000))]))
 
 
-(defn board-display [user-player]
+(defn display [user-player]
   [:div {:style {:width  "100%"
                  :height "100%"}}
    [:table.board

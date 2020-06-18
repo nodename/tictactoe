@@ -23,7 +23,7 @@
         "GAME OVER"
         (str "turn " turn " player " (string-rep player)))])
 
-   [display/board-display :X]
+   [display/display :X]
 
    (let [winner @(rf/subscribe [:game/winner])
          tied? @(rf/subscribe [:game/tied?])]
