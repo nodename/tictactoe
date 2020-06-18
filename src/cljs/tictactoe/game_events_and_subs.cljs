@@ -2,24 +2,31 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [tictactoe.player :refer [string-rep]]
-            [tictactoe.board :refer [starting-board apply-turns get-winner sq-contents]]))
+            [tictactoe.board :refer [starting-board apply-turns board-history get-winner sq-contents]]
+            [tictactoe.minimax :refer [minimax]]))
 
 (rf/reg-sub
   :game/turns
   (fn [db]
-    (:game db)))
+    (->>
+      (:game db)
+      vals
+      (sort-by :id)
+      (map :sq))))
 
 (rf/reg-sub
   :game/board
   (fn []
     (rf/subscribe [:game/turns]))
   (fn [turns]
-    (let [turns (->>
-                  turns
-                  vals
-                  (sort-by :id)
-                  (map :sq))]
-      (apply-turns starting-board :X turns))))
+    (apply-turns starting-board :X turns)))
+
+(rf/reg-sub
+  :game/board-history
+  (fn []
+    (rf/subscribe [:game/turns]))
+  (fn [turns]
+    (board-history starting-board :X turns)))
 
 (rf/reg-sub
   :game/winner
@@ -55,18 +62,31 @@
 (rf/reg-sub
   :game/next-turn-index
   (fn []
-    (rf/subscribe [:game/turns]))
-  (fn [turns _]
-    (count turns)))
+    [(rf/subscribe [:game/turns])
+     (rf/subscribe [:game/over?])])
+  (fn [[turns over?]]
+    (when (not over?)
+      (count turns))))
 
 (rf/reg-sub
   :game/next-player
   (fn []
     (rf/subscribe [:game/next-turn-index]))
   (fn [index _]
-    (if (even? index)
-      :X
-      :O)))
+    (cond
+      (nil? index) nil
+      (even? index) :X
+      :otherwise :O)))
+
+(rf/reg-sub
+  :game/computers-next-move
+  (fn []
+    [(rf/subscribe [:game/board])
+     (rf/subscribe [:game/next-player])])
+  (fn [[board player]]
+    (println "board" board)
+    (println "player" player)
+    (:move (minimax board player))))
 
 (rf/reg-sub
   :game/sq-content

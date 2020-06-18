@@ -1,8 +1,8 @@
 (ns tictactoe.board-display
   (:require [reagent.core :as r]
-            [re-frame.core :as re-frame]
-            [stylefy.core :as stylefy :refer [class]]
-            [re-frame.core :as rf]))
+            [stylefy.core :as stylefy :refer [class keyframes]]
+            [re-frame.core :as rf]
+            [tictactoe.player :refer [get-opponent]]))
 
 
 (class "board" {:width           "200px"
@@ -22,36 +22,59 @@
 (class "bottom-sq" {:border-bottom-color "transparent"})
 (class "left-sq" {:border-left-color "transparent"})
 
-(defn sq [classes row col]
-  (let [who-played @(rf/subscribe [:game/who-played [row col]])
-        winner @(rf/subscribe [:game/winner])]
-    [:td {:class    classes
+(keyframes "pulsate"
+           [:from {:opacity 0.0}]
+           [:to {:opacity 1.0}])
+
+(class "pulsate" {:animation-name            "pulsate"
+                  :animation-duration        "1s"
+                  :animation-iteration-count "5"})
+
+(defn sq [classes row col user-player]
+  (let [who-played-this-sq @(rf/subscribe [:game/who-played [row col]])
+        winner @(rf/subscribe [:game/winner])
+        next-player @(rf/subscribe [:game/next-player])
+        its-my-turn (= next-player user-player)]
+    [:td {:class    (if (nil? who-played-this-sq)
+                      classes
+                      (str classes " " "pulsate"))
           :id       (str "sq-" row "-" col)
           :style    {:text-align     "center"
                      :vertical-align "middle"
                      :line-height    "100%"}
-          :on-click (when (and (nil? who-played) (nil? winner))
+          :on-click (when (and (nil? who-played-this-sq) its-my-turn)
                       (fn [e]
                         (.preventDefault e)
                         (rf/dispatch [:game/add-turn [row col]])))}
      @(rf/subscribe [:game/sq-content [row col]])]))
 
 
-(defn board-display []
+(defn computer [computer-player]
+  (let [next-player @(rf/subscribe [:game/next-player])
+        computers-next-move @(rf/subscribe [:game/computers-next-move])
+        its-computers-turn (= computer-player next-player)]
+    [:div {:style {:display "none"}}
+     (when its-computers-turn
+       (js/setTimeout #(rf/dispatch [:game/add-turn computers-next-move]) 5000))]))
+
+
+(defn board-display [user-player]
   [:div {:style {:width  "100%"
                  :height "100%"}}
    [:table.board
     [:tbody {:style {:width  "100%"
                      :height "100%"}}
      [:tr
-      [sq "boardsquare top-sq left-sq" 0 0]
-      [sq "boardsquare top-sq" 0 1]
-      [sq "boardsquare top-sq right-sq" 0 2]]
+      [sq "boardsquare top-sq left-sq" 0 0 user-player]
+      [sq "boardsquare top-sq" 0 1 user-player]
+      [sq "boardsquare top-sq right-sq" 0 2 user-player]]
      [:tr
-      [sq "boardsquare left-sq" 1 0]
-      [sq "boardsquare" 1 1]
-      [sq "boardsquare right-sq" 1 2]]
+      [sq "boardsquare left-sq" 1 0 user-player]
+      [sq "boardsquare" 1 1 user-player]
+      [sq "boardsquare right-sq" 1 2 user-player]]
      [:tr
-      [sq "boardsquare bottom-sq left-sq" 2 0]
-      [sq "boardsquare bottom-sq" 2 1]
-      [sq "boardsquare bottom-sq right-sq" 2 2]]]]])
+      [sq "boardsquare bottom-sq left-sq" 2 0 user-player]
+      [sq "boardsquare bottom-sq" 2 1 user-player]
+      [sq "boardsquare bottom-sq right-sq" 2 2 user-player]]]]
+
+   [computer (get-opponent user-player)]])

@@ -5,7 +5,7 @@
             [tictactoe.board-display :as display]
             [tictactoe.minimax :refer [minimax]]
             [tictactoe.boards :refer []]
-            [tictactoe.game-events-and-subs] ;; this must be required for the subscriptions to work
+            [tictactoe.game-events-and-subs] ;; must require this for the subscriptions to work
             [re-frame.core :as rf]))
 
 (defn app []
@@ -23,7 +23,7 @@
         "GAME OVER"
         (str "turn " turn " player " (string-rep player)))])
 
-   [display/board-display]
+   [display/board-display :X]
 
    (let [winner @(rf/subscribe [:game/winner])
          tied? @(rf/subscribe [:game/tied?])]
@@ -35,7 +35,8 @@
                     :line-height    "50px"}}
       (cond
         (some? winner) (str (string-rep winner) " WINS!")
-        tied? "TIE GAME")])
+        tied? "TIE GAME"
+        :otherwise "")])
 
    [:div
     (pr-str @(rf/subscribe [:game/board]))]

@@ -6,7 +6,7 @@
             [tictactoe.routes :as routes]
             [tictactoe.events :as events]
             [tictactoe.app :as app]
-            [tictactoe.play :refer [play-a-game]]
+            [tictactoe.play :refer [simulate-a-game]]
             [tictactoe.board :refer [starting-board]]))
 
 (defn dev-setup []
@@ -25,4 +25,4 @@
   (stylefy/init)
   (dev-setup)
   (mount-root)
-  #_(play-a-game starting-board :X))
+  #_(simulate-a-game starting-board :X))

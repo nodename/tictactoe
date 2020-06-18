@@ -57,6 +57,9 @@
 (defn apply-turns [board next-player turns]
   (reduce (turns-reducer next-player) board turns))
 
+(defn board-history [board next-player turns]
+  (reductions (turns-reducer next-player) board turns))
+
 (defn get-line-winner [board line]
   (let [contents (line-contents board line)]
     (cond

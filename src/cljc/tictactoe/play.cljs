@@ -1,10 +1,10 @@
 (ns tictactoe.play
-  (:require [tictactoe.board :refer [print-board get-winner apply-turn]]
+  (:require [tictactoe.board :refer [print-board get-winner apply-turn starting-board]]
             [tictactoe.player :refer [get-opponent]]
             [tictactoe.minimax :refer [minimax]]))
 
 ;; computer plays both X and O, prints boards to console
-(defn play-a-game [board first-player]
+(defn simulate-a-game [board first-player]
   (loop [board board
          player first-player
          turn 0]
