@@ -5,20 +5,23 @@
             [tictactoe.board-display :as display]
             [tictactoe.minimax :refer [minimax]]
             [tictactoe.boards :refer []]
-            [tictactoe.game-events-and-subs] ;; must require this for the subscriptions to work
-            [re-frame.core :as rf]))
+            [tictactoe.game-events-and-subs]                ;; must require this for the subscriptions to work
+            [re-frame.core :as rf]
+            [stylefy.core :as stylefy :refer [class]]))
+
+(class "game-message" {:width          "200px"
+                :height         "50px"
+                :margin         "0 auto"
+                :text-align     "center"
+                :vertical-align "middle"
+                :line-height    "50px"})
 
 (defn app []
   [:div {:style {:width "100%" :height "100%"}}
    (let [turn @(rf/subscribe [:game/next-turn-index])
          player @(rf/subscribe [:game/next-player])
          game-over? @(rf/subscribe [:game/over?])]
-     [:div {:style {:width          "200px"
-                    :height         "50px"
-                    :margin         "0 auto"
-                    :text-align     "center"
-                    :vertical-align "middle"
-                    :line-height    "50px"}}
+     [:div {:class "game-message"}
       (if game-over?
         "GAME OVER"
         (str "turn " turn " player " (string-rep player)))])
@@ -27,12 +30,7 @@
 
    (let [winner @(rf/subscribe [:game/winner])
          tied? @(rf/subscribe [:game/tied?])]
-     [:div {:style {:width          "200px"
-                    :height         "50px"
-                    :margin         "0 auto"
-                    :text-align     "center"
-                    :vertical-align "middle"
-                    :line-height    "50px"}}
+     [:div {:class "game-message"}
       (cond
         (some? winner) (str (string-rep winner) " WINS!")
         tied? "TIE GAME"
