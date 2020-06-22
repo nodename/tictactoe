@@ -84,8 +84,6 @@
     [(rf/subscribe [:game/board])
      (rf/subscribe [:game/next-player])])
   (fn [[board player]]
-    (println "board" board)
-    (println "player" player)
     (:move (minimax board player))))
 
 (rf/reg-sub
@@ -94,11 +92,6 @@
     (rf/subscribe [:game/who-played sq]))
   (fn [player [_ _]]
     (string-rep player)))
-
-(rf/reg-event-fx
-  :game/error
-  (fn [cofx [_ msg]]
-    {:db (assoc (:db cofx) :error msg)}))
 
 (rf/reg-event-fx
   :game/add-turn
