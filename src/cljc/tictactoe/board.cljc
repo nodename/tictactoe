@@ -1,6 +1,9 @@
 (ns tictactoe.board
   (:require [tictactoe.player :refer [string-rep get-opponent]]))
 
+(defonce SIZE 3)
+(defonce RANGE (range SIZE))
+
 ;(defn neighbors [[x y]]
 ;  (for [dx [-1 0 1]
 ;        dy [-1 0 1]
@@ -14,24 +17,24 @@
 ;    [newx newy]))
 
 (def cols
-  (for [col [0 1 2]]
-    (for [row [0 1 2]]
+  (for [col RANGE]
+    (for [row RANGE]
       [row col])))
 
 (def rows
-  (for [row [0 1 2]]
-    (for [col [0 1 2]]
+  (for [row RANGE]
+    (for [col RANGE]
       [row col])))
 
 (def diags
-  (cons (for [col [0 1 2]]
+  (cons (for [col RANGE]
           [col col])
-        [(for [col [0 1 2]]
-           [(- 2 col) col])]))
+        [(for [col RANGE]
+           [(- (dec SIZE) col) col])]))
 
 (def all-lines (concat cols rows diags))
 
-(defonce starting-board (vec (repeat 3 (vec (repeat 3 nil)))))
+(defonce starting-board (vec (repeat SIZE (vec (repeat SIZE nil)))))
 
 (defn sq-contents [board [row col]]
   (let [row (get board row)]
@@ -43,7 +46,7 @@
 
 (defn print-board [board & [indent]]
   (let [indent (if (nil? indent) "" indent)]
-    (doall (map #(println indent (mapv string-rep (get board %))) [0 1 2]))))
+    (doall (map #(println indent (mapv string-rep (get board %))) RANGE))))
 
 (defn apply-turn [board player [row col]]
   (assoc-in board [row col] player))
@@ -78,7 +81,7 @@
   (for [line all-lines
         :let [contents (line-contents board line)]
         :let [freqs (frequencies contents)]
-        :when (and (= 2 (get freqs player))
+        :when (and (= (dec SIZE) (get freqs player))
                    (= 1 (get freqs nil)))
         :let [index (.indexOf contents nil)]
         :let [sq (get (vec line) index)]]

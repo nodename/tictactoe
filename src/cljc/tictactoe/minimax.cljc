@@ -1,14 +1,14 @@
 (ns tictactoe.minimax
   (:require [tictactoe.board :refer [sq-contents get-winner winning-moves]]
             [tictactoe.player :refer [get-opponent]]
-            [tictactoe.board :refer [apply-turn print-board]]))
+            [tictactoe.board :refer [RANGE apply-turn print-board]]))
 
 ;; https://towardsdatascience.com/lets-beat-games-using-a-bunch-of-code-part-1-tic-tac-toe-1543e981fec1
 
 
 (def all-squares
-  (for [row [0 1 2]
-        col [0 1 2]]
+  (for [row RANGE
+        col RANGE]
     [row col]))
 
 (defn spaces [n]

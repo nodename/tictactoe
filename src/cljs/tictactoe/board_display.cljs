@@ -2,7 +2,8 @@
   (:require [reagent.core :as r]
             [stylefy.core :as stylefy :refer [class keyframes]]
             [re-frame.core :as rf]
-            [tictactoe.player :refer [get-opponent]]))
+            [tictactoe.player :refer [get-opponent]]
+            [tictactoe.board :refer [SIZE RANGE]]))
 
 
 (class "board" {:width           "200px"
@@ -33,10 +34,14 @@
 (defn sq [classes row col user-player]
   (let [this-sq-is-empty? (nil? @(rf/subscribe [:game/who-played [row col]]))
         next-player @(rf/subscribe [:game/next-player])
-        its-users-turn? (= next-player user-player)]
+        its-users-turn? (= next-player user-player)
+        sq-classes (cond
+                     (= col 0) "left-sq"
+                     (= col (dec SIZE)) "right-sq"
+                     :otherwise "")]
     [:td {:class    (if this-sq-is-empty?
-                      classes
-                      (str classes " " "pulsate"))
+                      (str classes " " sq-classes)
+                      (str classes " " sq-classes " " "pulsate"))
           :id       (str "sq-" row "-" col)
           :style    {:text-align     "center"
                      :vertical-align "middle"
@@ -52,26 +57,24 @@
   (let [next-player @(rf/subscribe [:game/next-player])
         computers-next-move @(rf/subscribe [:game/computers-next-move])
         its-computers-turn? (= computer-player next-player)]
-     (when its-computers-turn?
-       (js/setTimeout #(rf/dispatch [:game/add-turn computers-next-move]) 5000))))
+    (when its-computers-turn?
+      (js/setTimeout #(rf/dispatch [:game/add-turn computers-next-move]) 5000))))
 
+(defn display-row [row user-player]
+  (let [classes (cond
+                  (= row 0) "board-sq top-sq"
+                  (= row (dec SIZE)) "board-sq bottom-sq"
+                  :otherwise "board-sq")]
+        [:tr
+         (doall (for [col RANGE]
+                  [sq classes row col user-player]))]))
 
-(defn display [user-player]
-  (computer (get-opponent user-player))
-  [:div {:style {:width  "100%"
-                 :height "100%"}}
-   [:table.board
-    [:tbody {:style {:width  "100%"
-                     :height "100%"}}
-     [:tr
-      [sq "board-sq top-sq left-sq" 0 0 user-player]
-      [sq "board-sq top-sq" 0 1 user-player]
-      [sq "board-sq top-sq right-sq" 0 2 user-player]]
-     [:tr
-      [sq "board-sq left-sq" 1 0 user-player]
-      [sq "board-sq" 1 1 user-player]
-      [sq "board-sq right-sq" 1 2 user-player]]
-     [:tr
-      [sq "board-sq bottom-sq left-sq" 2 0 user-player]
-      [sq "board-sq bottom-sq" 2 1 user-player]
-      [sq "board-sq bottom-sq right-sq" 2 2 user-player]]]]])
+  (defn display [user-player]
+    (computer (get-opponent user-player))
+    [:div {:style {:width  "100%"
+                   :height "100%"}}
+     [:table.board
+      [:tbody {:style {:width  "100%"
+                       :height "100%"}}
+       (doall (for [row RANGE]
+                [display-row row user-player]))]]])
