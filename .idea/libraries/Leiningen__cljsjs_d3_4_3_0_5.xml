@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Leiningen: cljsjs/d3:4.3.0-5">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/cljsjs/d3/4.3.0-5/d3-4.3.0-5.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

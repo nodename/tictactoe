@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Leiningen: stylefy:1.14.1">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/stylefy/stylefy/1.14.1/stylefy-1.14.1.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
